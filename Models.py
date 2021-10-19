@@ -1,6 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
 
 
 class Users(db.Model):
@@ -10,4 +7,3 @@ class Users(db.Model):
     lastName = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
-    crated_at = db.Column(db.DateTime)
