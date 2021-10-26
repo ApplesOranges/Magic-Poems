@@ -1,9 +1,22 @@
-from app import db
+from passlib.apps import custom_app_context as pwd_context
+from flask_sqlalchemy import SQLAlchemy
+from __main__ import app
 
-class Users(db.Model):
-    __tablename__ = 'Users'
+db=SQLAlchemy(app)
+
+class User(db.Model):
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     lastName = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
+
+    @staticmethod
+    def hash_password(password):
+        return pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password)
+
+    
