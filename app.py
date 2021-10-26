@@ -1,7 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_expects_json import expects_json
-from sqlalchemy.orm import session
+from jsonschema import ValidationError
+from passlib.apps import custom_app_context as pwd_context
+
+
+from schemas import signUpSchema
 
 app = Flask(__name__)
 
@@ -9,6 +13,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:teemo230
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
 
 class Users(db.Model):
     __tablename__ = 'Users'
@@ -18,38 +23,44 @@ class Users(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
 
+    @classmethod
+    def hash_password(self, password):
+        return pwd_context.encrypt(password)
+
+    @classmethod
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
 
 
-signUpSchema = {
-    'type': 'object',
-    'properties': {
-        'name': {'type': 'string', "maxLength": 255},
-        'lastName': {'type': 'string', "maxLength": 255},
-        'email': {'type': 'string', "pattern": "[^@]+@[^@]+\.[^@]"},
-        'password': {'type': 'string', "pattern": "^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$"}
-    },
-    'required': ['name', 'lastName', 'email', 'password']
-}
+# errores
+@ app.errorhandler(400)
+def bad_request(error):
+    if isinstance(error.description, ValidationError):
+        original_error = error.description
+        return make_response(jsonify({'error': original_error.message}), 400)
+    return error
 
 
-@app.route('/')
-def hello():
-    return jsonify({'msg': 'Hello world'})
-
-
-@app.route("/singUp",methods=['POST'])
+# rutas
+@app.route("/singUp", methods=['POST'])
 @expects_json(signUpSchema)
 def signUp():
     userData = request.get_json()
-    user=Users(
-        name=userData['name'],
-        lastName=userData['lastName'],
-        email=userData['email'],
-        password=userData['password'],
+    name, lastName, email, password = userData.values()
+    if Users.query.filter_by(email=email).first() is not None:
+        return jsonify({"msg": "email adress already taken"}), 400
+    else:
+        user = Users(
+            name=name,
+            lastName=lastName,
+            email=email,
+            password=Users.hash_password(password),
         )
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({"msg":"Success"}),200
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({"msg": "Success"}), 200
 
+
+# main
 if __name__ == "__main__":
     app.run(port=4000, debug=True)
