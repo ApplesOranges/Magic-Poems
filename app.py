@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, make_response
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
 from flask_jwt import JWT, jwt_required, current_identity
+from datetime import timedelta
 
 from schemas import signUpSchema
 
@@ -10,7 +11,10 @@ app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:teemo230@localhost:5432/magic-poems"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SECRET_KEY'] = 'super-secret'
+app.config['SECRET_KEY'] = 'el-kevin-se-la-come'
+app.config['JWT_AUTH_USERNAME_KEY']="email"
+app.config['JWT_AUTH_URL_RULE']="/Login"
+app.config['JWT_EXPIRATION_DELTA']=timedelta(days=2)
 
 from Models import db, User
 
@@ -20,10 +24,11 @@ def authenticate(email,password):
         return user
 
 def identity(payload):
-    id,name, lastName, email, password=payload.values()
-    return User.query.filter_by(id=5).first()
+    id=payload['identity']
+    return User.query.filter_by(id=id).first()
 
 jwt = JWT(app, authenticate, identity)
+
 
 # errores
 @ app.errorhandler(400)
@@ -58,11 +63,6 @@ def signUp():
 def protected():
     return '%s' % current_identity
 
-@app.route("/test")
-def test():
-    user=authenticate("ivanwhitetest@gmail.com","Test1234&&")
-    print(user)
-    return jsonify({"msg":"simon"}),200
 
 # main
 if __name__ == "__main__":

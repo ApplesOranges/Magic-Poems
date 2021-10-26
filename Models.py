@@ -12,6 +12,9 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
 
+    def __str__(self):
+        return str({"id":self.id})
+
     @staticmethod
     def hash_password(password):
         return pwd_context.encrypt(password)
