@@ -47,7 +47,6 @@ def signUp():
     if User.query.filter_by(email=email).first() is not None:
         return jsonify({"msg": "email adress already taken"}), 400
     else:
-        print(password)
         user = User(
             name=name,
             lastName=lastName,
