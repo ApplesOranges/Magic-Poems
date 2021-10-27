@@ -9,6 +9,7 @@ Flask-JWT==0.3.2
 Flask-Migrate==3.1.0
 Flask-SQLAlchemy==2.5.1
 greenlet==1.1.2
+gunicorn==20.1.0
 importlib-metadata==4.8.1
 importlib-resources==5.3.0
 itsdangerous==2.0.1
@@ -21,6 +22,7 @@ psycopg2-binary==2.9.1
 pycodestyle==2.8.0
 PyJWT==1.4.2
 pyrsistent==0.18.0
+python-decouple==3.5
 SQLAlchemy==1.4.25
 toml==0.10.2
 Werkzeug==2.0.2
