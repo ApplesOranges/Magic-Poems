@@ -3,20 +3,36 @@ from flask_expects_json import expects_json
 from jsonschema import ValidationError
 from flask_jwt import JWT, jwt_required, current_identity
 from datetime import timedelta
+from decouple import config as config_decouple
 
+from Models import db, User
 from schemas import signUpSchema
+from config import configdic
 
 
-app = Flask(__name__)
+def create_app(enviroment):
+    app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:teemo230@localhost:5432/magic-poems"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config.from_object(enviroment)
+
+    with app.app_context():
+        db.init_app(app)
+        db.create_all()
+
+    return app
+
+enviroment = configdic['development']
+if config_decouple('PRODUCTION', default=False):
+    enviroment = configdic['production']
+
+app = create_app(enviroment)
+
 app.config['SECRET_KEY'] = 'el-kevin-se-la-come'
 app.config['JWT_AUTH_USERNAME_KEY']="email"
 app.config['JWT_AUTH_URL_RULE']="/Login"
 app.config['JWT_EXPIRATION_DELTA']=timedelta(days=2)
 
-from Models import db, User
+
 
 def authenticate(email,password):
     user=User.query.filter_by(email=email).first()
@@ -65,5 +81,4 @@ def protected():
 
 # main
 if __name__ == "__main__":
-    db.create_all()
     app.run(port=4000, debug=True)
