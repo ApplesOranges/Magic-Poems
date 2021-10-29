@@ -3,6 +3,7 @@ attrs==21.2.0
 autopep8==1.5.7
 click==8.0.3
 Flask==2.0.2
+Flask-Cors==3.0.10
 flask-expects-json==1.6.0
 Flask-HTTPAuth==4.5.0
 Flask-JWT==0.3.2
@@ -23,6 +24,7 @@ pycodestyle==2.8.0
 PyJWT==1.4.2
 pyrsistent==0.18.0
 python-decouple==3.5
+six==1.16.0
 SQLAlchemy==1.4.25
 toml==0.10.2
 Werkzeug==2.0.2
