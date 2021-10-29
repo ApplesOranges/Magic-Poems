@@ -8,7 +8,7 @@ from decouple import config as config_decouple
 from Models import db, User
 from schemas import signUpSchema
 from config import configdic
-
+from flask_cors import CORS
 
 def create_app(enviroment):
     app = Flask(__name__)
@@ -26,6 +26,7 @@ if config_decouple('PRODUCTION', default=False):
     enviroment = configdic['production']
 
 app = create_app(enviroment)
+CORS(app)
 
 app.config['SECRET_KEY'] = 'el-kevin-se-la-come'
 app.config['JWT_AUTH_USERNAME_KEY']="email"
