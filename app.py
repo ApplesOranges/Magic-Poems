@@ -8,7 +8,7 @@ from decouple import config as config_decouple
 import json
 
 from Models import db, User, Neruda, Benedetti, Borges, GarciaLorca, OctavioPaz,UserPoem
-from schemas import signUpSchema, newPoem,savePoem
+from schemas import signUpSchema, newPoem,savePoem,getPoem
 from config import configdic
 from flask_cors import CORS
 
@@ -145,6 +145,30 @@ def savePoem():
     db.session.add(userPoem)
     db.session.commit()
     return jsonify({"msg": "Success"}), 200
+
+#contenido de un cierto poema
+@app.route("/list-poem")
+@jwt_required()
+def listPoem():
+    userid=int('%s' % current_identity)
+    poems=UserPoem.query.filter_by(user_id=userid)
+    data=[{"id":poem.id,"title":poem.title} for poem in poems]
+    return jsonify({"msg": "Success","data":data}), 200
+
+@app.route("/get-poem")
+@jwt_required()
+@expects_json(getPoem)
+def getPoem():
+    try:
+        userData = request.get_json()
+        poem_id=userData["id"]
+        poem=UserPoem.query.filter_by(id=poem_id).first()
+        poem=poem.poem
+        poem=json.loads(poem)
+        return jsonify({"msg": "Success","poem":poem}), 200
+    except:
+        return jsonify({"msg":"poem not found"}),400
+
 
 # main
 if __name__ == "__main__":

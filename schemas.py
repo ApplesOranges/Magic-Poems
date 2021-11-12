@@ -1,6 +1,3 @@
-from numpy import string_
-
-
 signUpSchema = {
     'type': 'object',
     'properties': {
@@ -12,21 +9,29 @@ signUpSchema = {
     'required': ['name', 'lastName', 'email', 'password']
 }
 
-newPoem={
+newPoem = {
     'type': 'object',
     'properties': {
         'keyword': {'type': 'string', "maxLength": 255, "minLength": 3},
-        'author':{'enum':['Octavio Paz','Pablo Neruda','Mario Benedetti','Garcia Lorca','Jose Luis Borges']}
+        'author': {'enum': ['Octavio Paz', 'Pablo Neruda', 'Mario Benedetti', 'Garcia Lorca', 'Jose Luis Borges']}
     },
-    'required': ['keyword','author']
+    'required': ['keyword', 'author']
 }
 
-savePoem={
+savePoem = {
     'type': 'object',
     'properties': {
-        'title':{'type': 'string', "maxLength": 255, "minLength": 3},
-        'keyword':{'type': 'string', "maxLength": 255, "minLength": 3},
-        'poem': {'type': 'array','items':{"type":"string"},"minItems": 1},
+        'title': {'type': 'string', "maxLength": 255, "minLength": 3},
+        'keyword': {'type': 'string', "maxLength": 255, "minLength": 3},
+        'poem': {'type': 'array', 'items': {"type": "string"}, "minItems": 1},
     },
     'required': ['poem']
+}
+
+getPoem = {
+    'type': 'object',
+    'properties': {
+        'id': {'type': 'integer'}
+    },
+    'required': ['id']
 }
