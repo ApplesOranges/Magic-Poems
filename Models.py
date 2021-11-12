@@ -13,7 +13,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
 
     def __str__(self):
-        return str({"id":self.id})
+        return str(self.id)
 
     @staticmethod
     def hash_password(password):
@@ -22,4 +22,41 @@ class User(db.Model):
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
 
-    
+class Neruda(db.Model):
+    __tablename__ = 'Neruda'
+    id = db.Column(db.Integer, primary_key=True)
+    doc_id = db.Column(db.Integer, nullable=False)
+    sentence=db.Column(db.String(1000),nullable=False)
+
+class Benedetti(db.Model):
+    __tablename__ = 'Benedetti'
+    id = db.Column(db.Integer, primary_key=True)
+    doc_id = db.Column(db.Integer, nullable=False)
+    sentence=db.Column(db.String(1000),nullable=False)
+
+class Borges(db.Model):
+    __tablename__ = 'Borges'
+    id = db.Column(db.Integer, primary_key=True)
+    doc_id = db.Column(db.Integer, nullable=False)
+    sentence=db.Column(db.String(2000),nullable=False)
+
+class GarciaLorca(db.Model):
+    __tablename__ = 'GarciaLorca'
+    id = db.Column(db.Integer, primary_key=True)
+    doc_id = db.Column(db.Integer, nullable=False)
+    sentence=db.Column(db.String(1000),nullable=False)
+
+class OctavioPaz(db.Model):
+    __tablename__ = 'OctavioPaz'
+    id = db.Column(db.Integer, primary_key=True)
+    doc_id = db.Column(db.Integer, nullable=False)
+    sentence=db.Column(db.String(2000),nullable=False)
+
+class UserPoem(db.Model):
+    __tablename__='UserPoem'
+    id = db.Column(db.Integer,primary_key=True)
+    user_id=db.Column(db.Integer,db.ForeignKey('User.id'),nullable=False)
+    user=db.relationship('User')
+    poem=db.Column(db.String(100000),nullable=False)
+    title=db.Column(db.String(255),nullable=False)
+    keyword=db.Column(db.String(255),nullable=False)
