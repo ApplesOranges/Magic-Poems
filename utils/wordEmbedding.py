@@ -3,7 +3,7 @@ import pandas as pd
 import spacy
 
 def poem_generator(verses, word, n_sents=4):
-    nlp = spacy.load("es_core_news_lg")
+    nlp = spacy.load("es_core_news_md")
     init_str = nlp(word)
     sentences=pd.DataFrame.from_dict(verses)
     sup_index= sentences.shape[0]
