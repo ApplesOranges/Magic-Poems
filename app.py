@@ -8,7 +8,7 @@ from decouple import config as config_decouple
 from Models import db, User
 from schemas import signUpSchema
 from config import configdic
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 
 def create_app(enviroment):
     app = Flask(__name__)
