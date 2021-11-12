@@ -1,6 +1,5 @@
 from passlib.apps import custom_app_context as pwd_context
 from flask_sqlalchemy import SQLAlchemy
-#from __main__ import app
 
 db=SQLAlchemy()
 
