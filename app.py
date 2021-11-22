@@ -169,7 +169,16 @@ def getPoem():
     except:
         return jsonify({"msg":"poem not found"}),400
 
-
+@app.route("/getName")
+@jwt_required()
+def getName():
+    try:
+        userid=int('%s' % current_identity)
+        us=User.query.filter_by(id=userid).first()
+        return jsonify({"name":f"{us.name} {us.lastName}","msg":"Success"}),200
+    except:
+        return jsonify({"msg":"Name not found"}),400
+    
 # main
 if __name__ == "__main__":
     app.run(port=4000, debug=True)
