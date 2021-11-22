@@ -7,7 +7,7 @@ from datetime import timedelta
 from decouple import config as config_decouple
 import json
 
-from Models import db, User, Neruda, Benedetti, Borges, GarciaLorca, OctavioPaz,UserPoem
+from Models import db, User, Neruda, Borges, OctavioPaz,UserPoem
 from schemas import signUpSchema, newPoem,savePoem,getPoem
 from config import configdic
 from flask_cors import CORS
@@ -108,18 +108,18 @@ def newPoem():
         poem=poem_generator(verses,keyword)
         return jsonify({"msg": "Success",
                         "poem":poem}), 200
-    elif author == 'Mario Benedetti':
-        result=Benedetti.query.with_entities(Benedetti.doc_id, Benedetti.sentence)
-        verses=[dict(i) for i in result]
-        poem=poem_generator(verses,keyword)
-        return jsonify({"msg": "Success",
-                        "poem":poem}), 200
-    elif author == 'Garcia Lorca':
-        result=GarciaLorca.query.with_entities(GarciaLorca.doc_id, GarciaLorca.sentence)
-        verses=[dict(i) for i in result]
-        poem=poem_generator(verses,keyword)
-        return jsonify({"msg": "Success",
-                        "poem":poem}), 200
+    #elif author == 'Mario Benedetti':
+    #    result=Benedetti.query.with_entities(Benedetti.doc_id, Benedetti.sentence)
+    #    verses=[dict(i) for i in result]
+    #    poem=poem_generator(verses,keyword)
+    #    return jsonify({"msg": "Success",
+    #                    "poem":poem}), 200
+    #elif author == 'Garcia Lorca':
+    #    result=GarciaLorca.query.with_entities(GarciaLorca.doc_id, GarciaLorca.sentence)
+    #    verses=[dict(i) for i in result]
+    #    poem=poem_generator(verses,keyword)
+    #    return jsonify({"msg": "Success",
+    #                    "poem":poem}), 200
     elif author == 'Jose Luis Borges':
         result=Borges.query.with_entities(Borges.doc_id, Borges.sentence)
         verses=[dict(i) for i in result]

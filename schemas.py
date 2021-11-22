@@ -13,7 +13,8 @@ newPoem = {
     'type': 'object',
     'properties': {
         'keyword': {'type': 'string', "maxLength": 255, "minLength": 3},
-        'author': {'enum': ['Octavio Paz', 'Pablo Neruda', 'Mario Benedetti', 'Garcia Lorca', 'Jose Luis Borges']}
+        #'author': {'enum': ['Octavio Paz', 'Pablo Neruda', 'Mario Benedetti', 'Garcia Lorca', 'Jose Luis Borges']}
+        'author': {'enum': ['Octavio Paz', 'Pablo Neruda', 'Jose Luis Borges']}
     },
     'required': ['keyword', 'author']
 }

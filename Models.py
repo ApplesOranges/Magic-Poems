@@ -27,11 +27,11 @@ class Neruda(db.Model):
     doc_id = db.Column(db.Integer, nullable=False)
     sentence=db.Column(db.String(1000),nullable=False)
 
-class Benedetti(db.Model):
-    __tablename__ = 'Benedetti'
-    id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, nullable=False)
-    sentence=db.Column(db.String(1000),nullable=False)
+#class Benedetti(db.Model):
+#    __tablename__ = 'Benedetti'
+#    id = db.Column(db.Integer, primary_key=True)
+#    doc_id = db.Column(db.Integer, nullable=False)
+#    sentence=db.Column(db.String(1000),nullable=False)
 
 class Borges(db.Model):
     __tablename__ = 'Borges'
@@ -39,11 +39,11 @@ class Borges(db.Model):
     doc_id = db.Column(db.Integer, nullable=False)
     sentence=db.Column(db.String(2000),nullable=False)
 
-class GarciaLorca(db.Model):
-    __tablename__ = 'GarciaLorca'
-    id = db.Column(db.Integer, primary_key=True)
-    doc_id = db.Column(db.Integer, nullable=False)
-    sentence=db.Column(db.String(1000),nullable=False)
+#class GarciaLorca(db.Model):
+#    __tablename__ = 'GarciaLorca'
+#    id = db.Column(db.Integer, primary_key=True)
+#    doc_id = db.Column(db.Integer, nullable=False)
+#    sentence=db.Column(db.String(1000),nullable=False)
 
 class OctavioPaz(db.Model):
     __tablename__ = 'OctavioPaz'
