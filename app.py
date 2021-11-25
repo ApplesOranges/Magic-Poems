@@ -8,7 +8,7 @@ from decouple import config as config_decouple
 import json
 
 from Models import db, User, Neruda, Borges, OctavioPaz,UserPoem
-from schemas import signUpSchema, newPoem,savePoem,getPoem
+from schemas import signUpSchema,savePoem
 from config import configdic
 from flask_cors import CORS
 
