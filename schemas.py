@@ -28,11 +28,3 @@ savePoem = {
     },
     'required': ['poem']
 }
-
-getPoem = {
-    'type': 'object',
-    'properties': {
-        'id': {'type': 'integer'}
-    },
-    'required': ['id']
-}

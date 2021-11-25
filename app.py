@@ -90,42 +90,31 @@ def protected():
     return '%s' % current_identity
 
 
-@app.route('/new-poem')
+@app.route('/new-poem/<keyword>/<author>')
 @jwt_required()
-@expects_json(newPoem)
-def newPoem():
-    userData = request.get_json()
-    keyword, author = userData.values()
-    if author == 'Octavio Paz':
+def newPoem(keyword,author):
+    print(keyword)
+    print(author)
+    if author == 'OctavioPaz':
         result=OctavioPaz.query.with_entities(OctavioPaz.doc_id, OctavioPaz.sentence)
         verses=[dict(i) for i in result]
         poem=poem_generator(verses,keyword)
         return jsonify({"msg": "Success",
                         "poem":poem}), 200
-    elif author == 'Pablo Neruda':
+    elif author == 'PabloNeruda':
         result=Neruda.query.with_entities(Neruda.doc_id, Neruda.sentence)
         verses=[dict(i) for i in result]
         poem=poem_generator(verses,keyword)
         return jsonify({"msg": "Success",
                         "poem":poem}), 200
-    #elif author == 'Mario Benedetti':
-    #    result=Benedetti.query.with_entities(Benedetti.doc_id, Benedetti.sentence)
-    #    verses=[dict(i) for i in result]
-    #    poem=poem_generator(verses,keyword)
-    #    return jsonify({"msg": "Success",
-    #                    "poem":poem}), 200
-    #elif author == 'Garcia Lorca':
-    #    result=GarciaLorca.query.with_entities(GarciaLorca.doc_id, GarciaLorca.sentence)
-    #    verses=[dict(i) for i in result]
-    #    poem=poem_generator(verses,keyword)
-    #    return jsonify({"msg": "Success",
-    #                    "poem":poem}), 200
-    elif author == 'Jose Luis Borges':
+    elif author == 'JoseLuisBorges':
         result=Borges.query.with_entities(Borges.doc_id, Borges.sentence)
         verses=[dict(i) for i in result]
         poem=poem_generator(verses,keyword)
         return jsonify({"msg": "Success",
                         "poem":poem}), 200
+    else:
+        return jsonify({"msg": "Invalid Parameters"}), 200
 
 @app.route('/save-poem',methods=['POST'])
 @jwt_required()
@@ -155,13 +144,10 @@ def listPoem():
     data=[{"id":poem.id,"title":poem.title} for poem in poems]
     return jsonify({"msg": "Success","data":data}), 200
 
-@app.route("/get-poem")
+@app.route("/get-poem/<poem_id>")
 @jwt_required()
-@expects_json(getPoem)
-def getPoem():
+def getPoem(poem_id):
     try:
-        userData = request.get_json()
-        poem_id=userData["id"]
         poem=UserPoem.query.filter_by(id=poem_id).first()
         poem=poem.poem
         poem=json.loads(poem)
