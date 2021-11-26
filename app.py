@@ -155,6 +155,7 @@ def getPoem(poem_id):
     except:
         return jsonify({"msg":"poem not found"}),400
 
+
 @app.route("/getName")
 @jwt_required()
 def getName():
@@ -164,7 +165,124 @@ def getName():
         return jsonify({"name":f"{us.name} {us.lastName}","msg":"Success"}),200
     except:
         return jsonify({"msg":"Name not found"}),400
-    
+
+@app.route("/isAdmin")
+@jwt_required()
+def isAdmin():
+    try:
+        userid=int('%s' % current_identity)
+        us=User.query.filter_by(id=userid).first()
+        return jsonify({"isAdmin":us.is_admin, "msg":"Success"}),200
+    except:
+        return jsonify({"msg":"ID not found"}),400
+
+
+@app.route("/deletePoem/<poem_id>",methods=['DELETE'])
+@jwt_required()
+def deletePoem(poem_id):
+    try:
+        userid=int('%s' % current_identity)
+        poemDelete=UserPoem.query.filter_by(id=poem_id,user_id=userid).first()
+        db.session.delete(poemDelete)
+        db.session.commit()
+        return jsonify({"msg":"Poem deleted"}),200
+    except:
+        return jsonify({"msg":"Id not found"}),400
+
+@app.route("/getUserInfoEmail/<email>")
+@jwt_required()
+def getUserInfoEmail(email):
+    try:
+        userid=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=userid).first()
+        if(isAdmin.is_admin):
+            user=User.query.filter_by(email=email).first()
+            return jsonify({"id":user.id,"email":user.email,"name":f"{user.name} {user.lastName}","msg":"Success"}),200
+        else:
+            return jsonify({"msg":"Access denied"}), 401
+    except:
+        return jsonify({"msg":"Email not found"}), 400
+
+
+@app.route("/getUserInfoId/<userid>")
+@jwt_required()
+def getUserInfoId(userid):
+    try:
+        userid=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=userid).first()
+        if(isAdmin.is_admin):
+            user=User.query.filter_by(id=userid).first()
+            return jsonify({"id": user.id, "email": user.email, "name":f"{user.name} {user.lastName}", "msg":"Success"})
+        else:
+            return jsonify({"msg":"Access denied"}), 401
+    except:
+        return jsonify({"msg":"Id not found"}), 400
+
+@app.route("/list-users")
+@jwt_required()
+def getUserList():
+    try:
+        userid=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=userid).first()
+        if(isAdmin.is_admin):
+            userList=User.query.all()
+            data=[{"id":user.id, "name":user.name, "lastname": user.lastName, "email": user.email,"isAdmin":user.is_admin} for user in userList]
+            return jsonify({"msg": "Success","data":data}), 200
+        else:
+            return jsonify({"msg":"Access denied"}), 401
+    except:
+        return jsonify({"msg":"bad request"}), 400
+
+@app.route("/list-poem-admin/<id>")
+@jwt_required()
+def listPoemAdmin(id):
+    try:
+        userid=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=userid).first()
+        if(isAdmin.is_admin):
+            poems=UserPoem.query.filter_by(user_id=id)
+            data=[{"id":poem.id,"title":poem.title} for poem in poems]
+            return jsonify({"msg": "Success","data":data}), 200
+        else:
+            return jsonify({"msg":"Access denied"}), 401
+    except:
+        return jsonify({"msg":"bad request"}), 400
+
+@app.route("/deleteUser/<userId>",methods=['DELETE'])
+@jwt_required()
+def deleteUser(userId):
+    try:
+        userid=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=userid).first()
+        if(isAdmin.is_admin):
+            user=User.query.filter_by(id=userId).first()
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({"msg":"User Deleted"}), 200
+        else:
+            return jsonify({"msg":"Access denied"}), 401
+    except:
+        return jsonify({"msg":"bad request"}), 400
+
+@app.route("/deletePoemAdmin/<poemId>",methods=['DELETE'])
+@jwt_required()
+def deletePoemAdmin(poemId):
+    try:
+        userid=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=userid).first()
+        if(isAdmin.is_admin):
+            poem=UserPoem.query.filter_by(id=poemId).first()
+            db.session.delete(poem)
+            db.session.commit()
+            return jsonify({"msg":"Poem Deleted"}), 200
+        else:
+            return jsonify({"msg":"Access denied"}), 401
+    except:
+        return jsonify({"msg":"bad request"}), 400
+##admin
+#eliminar poemas de un usuario
+
+
 # main
 if __name__ == "__main__":
     app.run(port=4000, debug=True)

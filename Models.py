@@ -10,6 +10,7 @@ class User(db.Model):
     lastName = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
+    is_admin = db.Column(db.Boolean,nullable=False,default=False)
 
     def __str__(self):
         return str(self.id)
@@ -27,23 +28,11 @@ class Neruda(db.Model):
     doc_id = db.Column(db.Integer, nullable=False)
     sentence=db.Column(db.String(1000),nullable=False)
 
-#class Benedetti(db.Model):
-#    __tablename__ = 'Benedetti'
-#    id = db.Column(db.Integer, primary_key=True)
-#    doc_id = db.Column(db.Integer, nullable=False)
-#    sentence=db.Column(db.String(1000),nullable=False)
-
 class Borges(db.Model):
     __tablename__ = 'Borges'
     id = db.Column(db.Integer, primary_key=True)
     doc_id = db.Column(db.Integer, nullable=False)
     sentence=db.Column(db.String(2000),nullable=False)
-
-#class GarciaLorca(db.Model):
-#    __tablename__ = 'GarciaLorca'
-#    id = db.Column(db.Integer, primary_key=True)
-#    doc_id = db.Column(db.Integer, nullable=False)
-#    sentence=db.Column(db.String(1000),nullable=False)
 
 class OctavioPaz(db.Model):
     __tablename__ = 'OctavioPaz'
