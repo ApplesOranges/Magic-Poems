@@ -279,10 +279,6 @@ def deletePoemAdmin(poemId):
             return jsonify({"msg":"Access denied"}), 401
     except:
         return jsonify({"msg":"bad request"}), 400
-##admin
-#eliminar poemas de un usuario
-
-
 # main
 if __name__ == "__main__":
     app.run(port=4000, debug=True)
