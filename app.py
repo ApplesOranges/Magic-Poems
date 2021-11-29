@@ -208,8 +208,8 @@ def getUserInfoEmail(email):
 @jwt_required()
 def getUserInfoId(userid):
     try:
-        userid=int('%s' % current_identity)
-        isAdmin=User.query.filter_by(id=userid).first()
+        user_id=int('%s' % current_identity)
+        isAdmin=User.query.filter_by(id=user_id).first()
         if(isAdmin.is_admin):
             user=User.query.filter_by(id=userid).first()
             return jsonify({"id": user.id, "email": user.email, "name":f"{user.name} {user.lastName}", "msg":"Success"})
